@@ -1,0 +1,30 @@
+{
+    "background": {
+       "service_worker": "background.js",
+       "type": "module"
+     },
+    "action": {
+      "default_icon": "icon.png",
+      "default_title": "ImageLoader"
+    },
+    "name": "ImageLoader",
+    "description": "Télécharger automatiquement les images d'un site web",
+    "homepage_url": "https://liamgenjs.vercel.app",
+    "icons": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    },
+    "permissions": [
+      "activeTab",
+      "scripting",
+      "downloads",
+      "storage"
+    ],
+    "host_permissions": [
+        "http://*/",
+        "https://*/"
+    ],
+    "version": "0.1",
+    "manifest_version": 3
+  }
