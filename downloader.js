@@ -27,6 +27,15 @@ function makeid(length) {
     return result;
 }
 
+var isValid=(function(){
+    var rg1=/^[^\\/:\*\?"<>\|]+$/; // forbidden characters \ / : * ? " < > |
+    var rg2=/^\./; // cannot start with dot (.)
+    var rg3=/^(nul|prn|con|lpt[0-9]|com[0-9])(\.|$)/i; // forbidden file names
+    return function isValid(fname){
+      return rg1.test(fname)&&!rg2.test(fname)&&!rg3.test(fname);
+    }
+  })();
+
 /* Aller chercher les images au lencement et au scroll */
 lookForImages()
 document.addEventListener("scroll", lookForImages);
@@ -63,8 +72,10 @@ function lookForImages(){
     images.forEach((image) => {
         /* Si une image est visible, qu'elle n'a pas déjà été téléchargée et qu'elle à une source */
         if(isVisible(image) && !image.getAttribute("downloaded-by-ext") && image.src && image.className != "no69gc"){
+            console.log("ok")
             var filename = image.src.substring(image.src.lastIndexOf('/')+1);
             let url = image.src
+            console.log(url)
             /* On envoit le message au back de télécharger l'image */
             if(image.src.startsWith("data:image/"))
             {
@@ -72,7 +83,7 @@ function lookForImages(){
                 let file = dataURLtoFile(image.src)
                 url = URL.createObjectURL(file)
             }
-            chrome.runtime.sendMessage({url: url, filename: filename});
+            chrome.runtime.sendMessage({url: url, filename: isValid(filename) ? filename : "image-"+makeid(5)+".png"});
             /* On définis l'image en tant que "déjà téléchargée" */
             image.setAttribute("downloaded-by-ext", "true");
         }
